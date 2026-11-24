@@ -76,6 +76,8 @@ At any point you can ask it to:
   - `image-generation-prompt.md`: the structure for image prompts.
   - `logo-specification.md`: the final logo specification.
   - `preview.html`: a page to preview the logo files.
+  - `export-png.html`: makes PNG copies of an SVG with a browser screenshot.
+  - `mockup.html`: places the real logo file on a photo (perspective, grain, shadow).
   - `brand-presentation.html`: the brand book (A4 landscape pages, printed to PDF).
 
 ## Installation

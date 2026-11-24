@@ -116,7 +116,7 @@ logo/
 ├── wordmark.svg
 ├── logo-primary-black.svg  explicit #000000 fill
 ├── logo-primary-white.svg  explicit #FFFFFF fill
-└── png/                    raster exports, if a converter exists
+└── png/                    raster exports (see section 8)
 ```
 
 - The main files use `currentColor`. Also export explicit `-black` and
@@ -143,19 +143,32 @@ Do every step before saying the file works:
 
 ## 8. PNG export
 
-- Check which converter is installed before claiming any export:
+- **Default: `templates/export-png.html`.** It needs only a Chromium-based
+  browser (Chrome, Edge, Chromium) and gives a transparent PNG. The window
+  must have the SVG's own proportions, taken from its `viewBox`:
+  height = width × viewBox height ÷ viewBox width, rounded.
+  ```bash
+  "<Chrome>" --headless=new --hide-scrollbars --allow-file-access-from-files \
+    --default-background-color=00000000 --window-size=1024,413 \
+    --screenshot=logo/png/logo-black-1024.png \
+    "file:///…/export-png.html?svg=file:///…/logo/logo-black.svg"
+  ```
+  Add `&bg=FFFFFF` for a solid background, `&pad=10` for a margin.
+- Export every explicit-colour file (`-black`, `-white`, `-color`) at 1024 px
+  and 256 px wide into `logo/png/`. Never export the `currentColor` file: it
+  comes out black.
+- If no such browser exists, check for a converter:
   `command -v rsvg-convert magick inkscape`.
-- Examples:
   - `rsvg-convert -w 1024 logo/symbol-black.svg -o logo/png/symbol-1024.png`
   - `magick -background none -density 384 logo/symbol-black.svg logo/png/symbol-1024.png`
   - `inkscape logo/symbol-black.svg --export-type=png --export-width=1024 --export-filename=logo/png/symbol-1024.png`
   - macOS fallback: `qlmanage -t -s 1024 -o logo/png logo/symbol-black.svg`
-    (output may have a white background). `sips` may convert SVG on some
-    macOS versions; check the result.
-- Export from the `-black` and `-white` files: converters may not resolve
-  `currentColor`.
-- Open at least one PNG to confirm it rendered. If no converter is
-  available, say so and leave the export to the user; do not claim it.
+    (output may have a white background).
+- Verify before claiming the export: the pixel size is what you asked for,
+  the file has an alpha channel when it should be transparent
+  (`sips -g hasAlpha file.png` on macOS), and at least one PNG has been
+  opened and looked at. If nothing can make a PNG, say so and leave the
+  export to the user; do not claim it.
 
 ## 9. Honest limits
 

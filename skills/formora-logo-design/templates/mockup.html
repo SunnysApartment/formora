@@ -1,0 +1,130 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>FORMORA mockup tool</title>
+<!--
+  FORMORA — mockup tool. Places the REAL logo file on a photo by geometry only (perspective, blend, grain, shadow).
+  The logo is never redrawn, so letters, dots and proportions cannot change. Self-contained, works from file://.
+
+  HOW TO USE
+  1. Copy this file into the project's mockups/ folder. Put blank photos in mockups/photos/ (free-licence photos
+     of a blank card, box, sign, screen). Record every photo's source and licence in mockups/SOURCES.md.
+  2. Edit SCENES below: one entry per photo, one "face" per surface that carries the logo.
+  3. Find each face's four corners with the grid view (do not guess them by eye from the whole photo):
+        mockup.html?m=NAME&grid=1                     whole photo with a labelled grid
+        mockup.html?m=NAME&grid=1&x=560&y=300&zoom=2  enlarged region starting at photo point (560,300)
+        add &contrast=6 when the surface is white on a white background and its edges are hard to see
+     Read off the corners in photo pixels, in this order: top-left, top-right, bottom-right, bottom-left
+     OF THE LOGO AS IT SHOULD READ on that surface.
+  4. Check the fit:  mockup.html?m=NAME&outline=1   draws each face's edge in red; it must sit on the surface's edge.
+  5. Render the picture with a browser screenshot, the window sized to the photo, for example:
+        "<Chrome>" --headless=new --hide-scrollbars --allow-file-access-from-files --window-size=1600,1067 \
+                   --screenshot=mockup-NAME.png "file:///…/mockups/mockup.html?m=NAME"
+  6. Open the PNG and compare the logo with the approved artwork (shape, letters, dots, colours). The tint of a
+     face must not spill past the surface. Mockups are illustrations, not production files: say so.
+
+  A FACE
+    q        four photo points [x,y]: top-left, top-right, bottom-right, bottom-left          (required)
+    w, h     size of the flat face in px before it is bent onto the photo; match the surface's real proportions
+             (a business card is about 900 × 560)                                              (required)
+    logo     path to the logo file, relative to this page
+    logoWidth  width of the logo on the flat face, in px
+    finish   how the logo sits on the surface:
+               'print'        flat ink, edges softened to match the photo
+               'letterpress'  ink pressed into paper: darker inner edge, soft dent shadow
+               'ink'          stamped ink with tiny speckles (kraft, cardboard, fabric)
+               'raised'       cut letters fixed to a sign, casting a soft shadow
+               'none'         no effect (screens)
+    bg       colour printed across the whole face, e.g. the brand colour on a card back. A white logo on a coloured
+             bg shows the photo's own white paper through the letters.
+    grain    true = paper grain            fibres   true = pale flecks (use on coloured stock)
+    shade    a CSS gradient for light falling across the face
+    opacity  ink strength of the logo, 0 to 1 (about .86 on kraft)
+    blend    'multiply' (default: the photo's texture and shadows show through) or 'normal' (can lighten: glare)
+    radius   corner radius of the face (screens)
+    html     custom content instead of a single logo (e.g. a social post layout on a phone screen)
+  Faces blend by "multiply", so they can only darken: use a light photo surface, and put glare in a 'normal' face.
+-->
+<style>
+  html,body{margin:0;background:#fff}
+  #stage{position:relative;overflow:hidden}
+  #stage>img.photo{display:block}
+  .face{position:absolute;left:0;top:0;transform-origin:0 0;mix-blend-mode:multiply;
+        display:flex;align-items:center;justify-content:center;flex-direction:column}
+  .face img{display:block}
+  .face.outline{outline:2px solid #e00000;outline-offset:-1px}
+  /* grid view */
+  .gv,.gh{position:absolute;background:rgba(255,0,0,.45)}.gv{width:1px;top:0;bottom:0}.gh{height:1px;left:0;right:0}
+  .gl{position:absolute;font:11px ui-monospace,Menlo,monospace;color:#c00;background:#fff;padding:0 2px}
+</style>
+<svg width="0" height="0" style="position:absolute">
+<filter id="ink" x="0" y="0" width="100%" height="100%">
+  <!-- stamped ink: tiny speckles where the ink did not take -->
+  <feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="2" result="n"/>
+  <feColorMatrix in="n" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.2 2.05" result="m"/>
+  <feComposite in="SourceGraphic" in2="m" operator="in"/></filter>
+<filter id="press" x="-5%" y="-10%" width="110%" height="120%">
+  <!-- letterpress: darker along the upper inside edge, soft dent shadow below -->
+  <feOffset in="SourceAlpha" dy="3"/><feGaussianBlur stdDeviation="1.6" result="b"/>
+  <feComposite in="SourceAlpha" in2="b" operator="out"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .5 0" result="inner"/>
+  <feGaussianBlur in="SourceAlpha" stdDeviation="2.2"/><feOffset dy="1.5"/><feColorMatrix values="0 0 0 0 .2  0 0 0 0 .2  0 0 0 0 .2  0 0 0 .22 0" result="dent"/>
+  <feMerge><feMergeNode in="dent"/><feMergeNode in="SourceGraphic"/><feMergeNode in="inner"/></feMerge></filter>
+</svg>
+<div id="stage"></div>
+<script>
+/* ───────────── EDIT FROM HERE ───────────── */
+var PHOTO_WIDTH = 1600;      // every photo is shown this wide; corner points are measured at this width
+var LOGO = '../logo/';       // folder of the logo files, relative to this page
+var SCENES = {
+  // Example. Replace with your own scenes; the corner points below belong to one particular photo.
+  card: { photo: 'photos/card.jpg', faces: [
+    { w: 900, h: 560, q: [[619,585],[1047,342],[1266,564],[825,839]],
+      logo: LOGO + 'logo-color.svg', logoWidth: 500, finish: 'letterpress',
+      bg: '#FAF6EE', grain: true, shade: 'linear-gradient(120deg,rgba(255,255,255,0) 35%,rgba(60,70,80,.13))' }
+  ]}
+};
+/* ───────────── TO HERE ───────────── */
+
+var FINISH = {
+  print: 'blur(.45px)',
+  letterpress: 'url(#press) blur(.45px)',
+  ink: 'url(#ink) blur(.6px)',
+  raised: 'blur(.6px) drop-shadow(4px 6px 4px rgba(0,0,0,.38)) drop-shadow(1px 1px 0 rgba(0,0,0,.35))',
+  none: 'none'
+};
+// maps a w×h box onto four photo points (top-left, top-right, bottom-right, bottom-left)
+function adj(m){return[m[4]*m[8]-m[5]*m[7],m[2]*m[7]-m[1]*m[8],m[1]*m[5]-m[2]*m[4],m[5]*m[6]-m[3]*m[8],m[0]*m[8]-m[2]*m[6],m[2]*m[3]-m[0]*m[5],m[3]*m[7]-m[4]*m[6],m[1]*m[6]-m[0]*m[7],m[0]*m[4]-m[1]*m[3]]}
+function mm(a,b){var c=[];for(var i=0;i<3;i++)for(var j=0;j<3;j++){var s=0;for(var k=0;k<3;k++)s+=a[3*i+k]*b[3*k+j];c[3*i+j]=s}return c}
+function mv(m,v){return[m[0]*v[0]+m[1]*v[1]+m[2]*v[2],m[3]*v[0]+m[4]*v[1]+m[5]*v[2],m[6]*v[0]+m[7]*v[1]+m[8]*v[2]]}
+function basis(p){var m=[p[0][0],p[1][0],p[2][0],p[0][1],p[1][1],p[2][1],1,1,1],v=mv(adj(m),[p[3][0],p[3][1],1]);return mm(m,[v[0],0,0,0,v[1],0,0,0,v[2]])}
+function homography(w,h,q){var s=basis([[0,0],[w,0],[0,h],[w,h]]),d=basis([q[0],q[1],q[3],q[2]]),t=mm(d,adj(s));for(var i=0;i<9;i++)t[i]/=t[8];return t}
+function quad(w,h,q){var t=homography(w,h,q);return'matrix3d('+[t[0],t[3],0,t[6],t[1],t[4],0,t[7],0,0,1,0,t[2],t[5],0,t[8]].join(',')+')'}
+// self-check: all four corners of the box must land on the four points
+(function(){var q=[[10,20],[300,40],[280,200],[30,180]],t=homography(100,50,q),c=[[0,0],[100,0],[100,50],[0,50]];
+  c.forEach(function(p,i){var r=mv(t,[p[0],p[1],1]);console.assert(Math.abs(r[0]/r[2]-q[i][0])<1e-6&&Math.abs(r[1]/r[2]-q[i][1])<1e-6,'quad mapping wrong at corner '+i)})})();
+
+// grain and light are background layers of the face (separate overlay layers mis-clip under perspective)
+var GRAIN='url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'400\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'.75\' numOctaves=\'3\'/%3E%3CfeColorMatrix values=\'0 0 0 0 .45  0 0 0 0 .4  0 0 0 0 .35  0 0 0 .3 0\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")';
+var FIBRES=GRAIN.replace("baseFrequency='.75'","baseFrequency='.9' seed='7'").replace('0 0 0 0 .45  0 0 0 0 .4  0 0 0 0 .35  0 0 0 .3 0','0 0 0 0 1  0 0 0 0 .9  0 0 0 0 .8  0 0 0 .34 -.02');
+console.assert(FIBRES!==GRAIN,'fibres layer not derived');
+
+var Q=new URLSearchParams(location.search),name=Q.get('m')||Object.keys(SCENES)[0],scene=SCENES[name],st=document.getElementById('stage');
+if(!scene){document.body.textContent='No scene named "'+name+'". Scenes: '+Object.keys(SCENES).join(', ')}
+else if(Q.get('grid')){ // corner-finding view: enlarged, high-contrast photo with a labelled grid in photo pixels
+  var z=+Q.get('zoom')||1,x0=+Q.get('x')||0,y0=+Q.get('y')||0,step=z>=2?20:50;
+  var c=+Q.get('contrast')||2; // 2 suits mid-tone surfaces; use contrast=6 for white paper on a white table
+  st.style.cssText='width:100vw;height:100vh';
+  st.innerHTML='<img class="photo" src="'+scene.photo+'" style="position:absolute;left:'+(-x0*z)+'px;top:'+(-y0*z)+'px;width:'+PHOTO_WIDTH*z+'px;filter:grayscale(1) brightness('+(c>4?.62:1)+') contrast('+c+')">';
+  for(var x=Math.ceil(x0/step)*step;(x-x0)*z<innerWidth;x+=step){st.insertAdjacentHTML('beforeend','<div class="gv" style="left:'+(x-x0)*z+'px"></div>'+(x%(step*2)==0?'<span class="gl" style="left:'+((x-x0)*z+2)+'px;top:0">'+x+'</span>':''))}
+  for(var y=Math.ceil(y0/step)*step;(y-y0)*z<innerHeight;y+=step){st.insertAdjacentHTML('beforeend','<div class="gh" style="top:'+(y-y0)*z+'px"></div><span class="gl" style="top:'+((y-y0)*z+2)+'px;left:0">'+y+'</span>')}
+}else{
+  st.innerHTML='<img class="photo" src="'+scene.photo+'" style="width:'+PHOTO_WIDTH+'px">';
+  scene.faces.forEach(function(f){
+    var d=document.createElement('div');d.className='face'+(Q.get('outline')?' outline':'');
+    d.style.cssText+='width:'+f.w+'px;height:'+f.h+'px;transform:'+quad(f.w,f.h,f.q)+';background:'+([f.shade,f.fibres&&FIBRES,f.grain&&GRAIN,f.bg].filter(Boolean).join(',')||'none')+';'+
+      (f.radius?'border-radius:'+f.radius+';overflow:hidden;justify-content:flex-start;':'');
+    if(f.blend)d.style.mixBlendMode=f.blend;
+    if(f.html!=null)d.innerHTML=f.html;
+    else if(f.logo){var i=new Image();i.src=f.logo;i.style.cssText='width:'+(f.logoWidth||Math.round(f.w*.55))+'px;filter:'+(FINISH[f.finish||'print']||FINISH.print)+';opacity:'+(f.opacity==null?1:f.opacity);d.appendChild(i)}
+    st.appendChild(d)});
+}
+</script>

@@ -90,4 +90,5 @@ vector reconstruction instructions, or the full identity presentation.
 | `references/identity-system.md` | Colour, type, usage rules, mockups |
 
 Templates: `concept-brief.md`, `image-generation-prompt.md`, `logo-specification.md`,
-`preview.html` (visual size and one-colour check), `brand-presentation.html`.
+`preview.html` (visual size and one-colour check), `export-png.html` (PNG copies of
+an SVG), `mockup.html` (the real logo placed on a photo), `brand-presentation.html`.

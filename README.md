@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="LICENSE"><img alt="License: MIT" src="assets/badges/license.svg"></a>
-  <a href="CHANGELOG.md"><img alt="Version 1.3.0" src="assets/badges/version.svg"></a>
+  <a href="CHANGELOG.md"><img alt="Version 1.4.0" src="assets/badges/version.svg"></a>
   <img alt="Claude Code skill" src="assets/badges/skill.svg">
   <img alt="Latin and Arabic" src="assets/badges/scripts.svg">
 </p>
@@ -109,7 +109,8 @@ Full PDFs: [English](examples/saqr/brand-presentation.pdf) ·
 
 Image generators tend to redraw a logo, and they break Arabic lettering most of all. FORMORA's mockups place the
 **real vector file** on a photograph by geometry only: perspective, blending, paper grain, shadow. The letters
-cannot change.
+cannot change. The tool is [`mockup.html`](skills/formora-logo-design/templates/mockup.html): you mark the four
+corners of a surface, pick a finish (letterpress, stamped ink, raised lettering), and screenshot.
 
 <table>
   <tr>
@@ -192,6 +193,8 @@ formora/
 │       ├── image-generation-prompt.md
 │       ├── logo-specification.md
 │       ├── preview.html            size, one-colour, light and dark check
+│       ├── export-png.html         PNG copies of an SVG, transparent
+│       ├── mockup.html             the real logo placed on a photo
 │       └── brand-presentation.html the brand book (A4 landscape, prints to PDF)
 ├── examples/
 │   ├── wolf/                       Latin symbol: brief and SVG files
@@ -225,7 +228,6 @@ FORMORA is new. Read this before relying on it.
   not been run on a new brief in a fresh session.
 - **The brand book template** is tested with wide and square logos, in English and in Arabic right-to-left. It is
   untested with a light primary colour.
-- **No PNG exports** of the example logos; the SVG files are the artwork.
 - **Fonts:** the brand book falls back to system fonts when the suggested typefaces are not installed.
 
 ## Roadmap
@@ -234,7 +236,8 @@ FORMORA is new. Read this before relying on it.
 - [x] **1.1** — vector construction and the size-and-colour preview
 - [x] **1.2** — identity system: palette, type, usage rules
 - [x] **1.3** — mockups and the brand book
-- [ ] **Next** — a ready-made tool for placing a logo on a photo; PNG exports; a light-colour brand book
+- [x] **1.4** — a ready-made mockup tool and PNG export tool
+- [ ] **Next** — a light-colour brand book; a fresh-session test on a new brief
 - [ ] **2.0** — similarity detection, design memory, a larger concept engine
 
 Changes are recorded in the [changelog](CHANGELOG.md).

@@ -9,6 +9,6 @@ Free photos from Unsplash (Unsplash licence: free for commercial use, no credit 
 | photos/sign.jpg | https://images.unsplash.com/photo-1700760933873-9a31b1d8ce93 |
 | photos/phone.jpg | https://images.unsplash.com/photo-1695973056909-67189edc1c9e |
 
-`mock.html?m=card|box|sign|phone` places the real logo files from `../logo/` on each photo; the PNGs are screenshots of that page.
+`mockup.html?m=card|box|sign|phone` (the skill's `templates/mockup.html` with this project's scenes) places the real logo files from `../logo/` on each photo; the PNGs are screenshots of that page.
 
-The photos are not stored in this repository. To rebuild the mockups, download each one at 1600 px wide into a `photos/` folder beside `mock.html`, using the file names in the table.
+The photos are not stored in this repository. To rebuild the mockups, download each one at 1600 px wide into a `photos/` folder beside `mockup.html`, using the file names in the table.

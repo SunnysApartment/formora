@@ -1,0 +1,27 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>FORMORA PNG export</title>
+<!--
+  FORMORA — PNG export. Shows one SVG filling the window, so a browser screenshot becomes the PNG.
+  Needs only a Chromium-based browser (Chrome, Edge, Chromium); no converter to install.
+
+    export-png.html?svg=<path or file:// URL of the SVG>[&bg=<hex without #>][&pad=<percent>]
+      bg    background colour, e.g. FFFFFF. Leave out for a transparent PNG.
+      pad   empty margin around the mark as a percent of the picture, e.g. 10. Default 0.
+
+  The window must have the SVG's own proportions (width : height from its viewBox), or the PNG gets empty bands.
+  Transparent PNG, 1024 px wide, for an SVG whose viewBox is 644 × 260  (1024 × 260 / 644 = 413):
+    "<Chrome>" --headless=new --hide-scrollbars --allow-file-access-from-files \
+               --default-background-color=00000000 --window-size=1024,413 \
+               --screenshot=logo/png/logo-black-1024.png "file:///…/export-png.html?svg=file:///…/logo/logo-black.svg"
+
+  Export from the explicit -black, -white and -color files, not the currentColor one (it would come out black).
+  Afterwards open at least one PNG and check it is sharp, complete and, if meant to be, transparent.
+-->
+<style>html,body{margin:0;height:100%;background:transparent}img{display:block;width:100%;height:100%;object-fit:contain;box-sizing:border-box}</style>
+<body><script>
+var q=new URLSearchParams(location.search),s=q.get('svg');
+if(!s)document.body.textContent='No SVG given. Add ?svg=<path to the SVG>.';
+else{if(q.get('bg'))document.documentElement.style.background=document.body.style.background='#'+q.get('bg');
+  var i=new Image();i.alt='';i.style.padding=(+q.get('pad')||0)+'%';i.src=s;document.body.appendChild(i)}
+</script></body>
