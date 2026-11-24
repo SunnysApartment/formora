@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="12 44 564 260">
+  <title>صقر</title>
+  <g id="wordmark" fill="#FFFFFF">
+    <!-- small-size version: no feather notches, shorter wing, larger dots -->
+    <path fill-rule="evenodd" d="M77 192 L128 192 L128 154 L154 128 L224 128 L224 192 L256 192 L256 160 L288 160 L288 192 L320 192 L320 160 L384 115 L464 102 L560 224 L102 224 L83 250 L29 288 L42 227 Z M160 160 L192 160 L192 192 L160 192 Z M352 192 L352 170 L394 144 L448 138 L490 192 Z M144 58 L166 80 L144 102 L122 80 Z M208 58 L230 80 L208 102 L186 80 Z"/>
+  </g>
+</svg>

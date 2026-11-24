@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<title>صقر (Saqr) — Brand identity</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+/* Brand book: fixed A4 landscape pages, full bleed. Print with no margins. */
+:root {
+  --leather: #7A4022; --sand: #D8BC8E; --eye: #E3A51E; --night: #1D1A16; --bone: #F6F1E7;
+  --display: "Didot", "Bodoni 72", "Hoefler Text", Georgia, serif;
+  --text: "Avenir Next", "Helvetica Neue", Arial, "Geeza Pro", sans-serif;
+  --arabic: "Reem Kufi", "KufiStandardGK", "Geeza Pro", sans-serif;
+}
+@page { size: 297mm 210mm; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { background: #8a8580; }
+body { font-family: var(--text); font-size: 9.5pt; line-height: 1.55; color: var(--night); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+img { display: block; }
+
+.page { position: relative; inline-size: 297mm; block-size: 210mm; overflow: hidden; background: var(--bone); padding: 20mm 22mm 18mm; margin: 8mm auto; break-after: page; break-inside: avoid; }
+.page.dark { background: var(--night); color: var(--bone); }
+.page.leather { background: var(--leather); color: var(--bone); }
+.page.bleed { padding: 0; }
+
+/* running marks */
+.mark { position: absolute; inset-block-end: 9mm; inset-inline: 22mm; display: flex; justify-content: space-between; font-size: 6.5pt; letter-spacing: .22em; text-transform: uppercase; opacity: .55; }
+.mark b { font-weight: 500; }
+.on-photo .mark { color: #fff; opacity: .85; }
+
+.eyebrow { display: flex; align-items: center; gap: 4mm; font-size: 7pt; letter-spacing: .26em; text-transform: uppercase; font-weight: 500; }
+.eyebrow i { font-style: normal; color: var(--leather); }
+.dark .eyebrow i, .leather .eyebrow i { color: var(--eye); }
+.eyebrow::after { content: ""; flex: 0 0 18mm; block-size: .3mm; background: currentColor; opacity: .5; }
+h1, h2 { font-family: var(--display); font-weight: 400; letter-spacing: -.01em; line-height: 1.04; }
+h2 { font-size: 46pt; margin-block: 9mm 13mm; }
+h3 { font-size: 7.5pt; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; margin-block-end: 2mm; }
+.lead { font-family: var(--display); font-size: 15pt; line-height: 1.35; max-inline-size: 115mm; }
+.muted { opacity: .68; }
+.note { font-size: 7.5pt; opacity: .62; max-inline-size: 150mm; }
+.gold { color: var(--eye); }
+.ar { font-family: var(--arabic); }
+
+/* 1 cover */
+.cover { display: grid; grid-template-rows: auto 1fr auto; }
+.cover .top, .cover .bottom { display: flex; justify-content: space-between; font-size: 7pt; letter-spacing: .26em; text-transform: uppercase; opacity: .7; }
+.cover .centre { display: grid; place-items: center; }
+.cover .centre img { inline-size: 150mm; }
+.cover .rule { position: absolute; inset-inline: 22mm; block-size: .3mm; background: var(--eye); opacity: .8; }
+.cover .rule.a { inset-block-start: 30mm; } .cover .rule.b { inset-block-end: 30mm; }
+.cover h1 { font-size: 13pt; letter-spacing: .5em; text-transform: uppercase; font-family: var(--text); font-weight: 400; text-align: center; margin-block-start: 12mm; }
+.cover h1 span { color: var(--eye); }
+
+/* 2 idea */
+.idea { display: grid; grid-template-columns: 96mm 1fr; gap: 14mm; }
+.idea .big { font-family: var(--display); font-size: 44pt; line-height: 1; margin-block: 8mm 7mm; }
+.idea .big em { font-style: italic; color: var(--leather); }
+.anatomy { align-self: center; }
+.anatomy img { inline-size: 100%; }
+.anatomy ol { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 5mm; margin-block-start: 9mm; border-block-start: .3mm solid rgba(29,26,22,.35); padding-block-start: 4mm; }
+.anatomy li { font-size: 8.5pt; }
+.anatomy li b { display: block; font-family: var(--arabic); font-size: 20pt; font-weight: 400; color: var(--leather); line-height: 1.2; }
+
+/* split photo pages */
+.split { display: grid; grid-template-columns: 1fr 1fr; block-size: 100%; }
+.split > img, .full > img { inline-size: 100%; block-size: 100%; object-fit: cover; }
+.split .panel { padding: 20mm 22mm 18mm 18mm; display: flex; flex-direction: column; justify-content: center; }
+.split .panel img { inline-size: 62mm; margin-block-end: 14mm; }
+.quote { font-family: var(--display); font-size: 25pt; line-height: 1.18; }
+.cap { position: absolute; inset-block-end: 9mm; inset-inline-start: 22mm; color: #fff; font-size: 6.5pt; letter-spacing: .22em; text-transform: uppercase; text-shadow: 0 0 6px rgba(0,0,0,.45); }
+
+/* 4 versions */
+.tiles { display: grid; grid-template-columns: 1.25fr 1fr; grid-template-rows: 1fr 1fr; block-size: 100%; }
+.tiles > div { position: relative; display: grid; place-items: center; }
+.tiles span { position: absolute; inset-block-end: 7mm; inset-inline-start: 9mm; font-size: 6.5pt; letter-spacing: .22em; text-transform: uppercase; opacity: .7; }
+.tiles .t1 { grid-row: 1 / 3; background: var(--bone); } .tiles .t1 img { inline-size: 118mm; }
+.tiles .t2 { background: var(--leather); color: var(--bone); } .tiles .t2 img { inline-size: 70mm; }
+.tiles .t3 { background: var(--night); color: var(--bone); display: flex; align-items: center; justify-content: center; gap: 12mm; }
+.tiles .t3 img { inline-size: 44mm; }
+.tiles .head { position: absolute; inset-block-start: 20mm; inset-inline-start: 22mm; }
+.tiles .head h2 { margin-block-end: 0; }
+
+/* 5 space */
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16mm; align-items: start; }
+.clear { background: #fff; padding: 14mm; display: grid; place-items: center; }
+.clear div { border: .3mm dashed var(--leather); padding: 11mm; position: relative; }
+.clear div::before { content: "x"; position: absolute; inset-block-start: 2mm; inset-inline-start: 50%; font-family: var(--display); font-style: italic; color: var(--leather); font-size: 10pt; }
+.clear img { inline-size: 74mm; }
+.rules { display: grid; gap: 5mm; }
+.rules div { border-block-start: .3mm solid rgba(29,26,22,.3); padding-block-start: 3mm; }
+.sizes { display: flex; align-items: flex-end; gap: 12mm; margin-block-start: 9mm; }
+.sizes figcaption { font-size: 6.5pt; letter-spacing: .2em; margin-block-start: 2mm; opacity: .6; }
+
+/* 6 colour */
+.bands { display: grid; grid-template-columns: 1.9fr 1.2fr 1.05fr 1.25fr 1.2fr; block-size: 100%; }
+.band { padding: 20mm 7mm 18mm; display: flex; flex-direction: column; justify-content: flex-end; font-size: 7.5pt; }
+.band:first-child { padding-inline-start: 22mm; }
+.band h3 { font-family: var(--display); font-size: 17pt; text-transform: none; letter-spacing: 0; font-weight: 400; line-height: 1.1; margin-block-end: 3mm; }
+.band dl { display: grid; grid-template-columns: auto 1fr; gap: .4mm 3mm; font-variant-numeric: tabular-nums; }
+.band dt { opacity: .6; letter-spacing: .12em; text-transform: uppercase; font-size: 6pt; align-self: center; }
+.band p { margin-block-start: 4mm; opacity: .8; min-block-size: 20mm; }
+.bands .head { position: absolute; inset-block-start: 20mm; inset-inline-start: 22mm; color: var(--bone); }
+
+/* 7 type */
+.type { display: grid; grid-template-columns: 1fr 1fr; gap: 16mm; }
+.type .spec { border-block-start: .3mm solid rgba(246,241,231,.4); padding-block-start: 5mm; }
+.type .glyphs { font-size: 66pt; line-height: 1.5; color: var(--bone); margin-block: 6mm 8mm; }
+.type .heading .glyphs { font-family: var(--arabic); color: var(--eye); }
+.type .body .glyphs { font-family: "IBM Plex Sans Arabic", "Geeza Pro", var(--text); }
+
+/* 8 use */
+table { inline-size: 100%; border-collapse: collapse; font-size: 8pt; }
+th, td { text-align: start; padding: 2mm 3mm 2mm 0; border-block-end: .25mm solid rgba(29,26,22,.2); }
+th { font-size: 6.5pt; letter-spacing: .16em; text-transform: uppercase; font-weight: 600; border-block-end-color: var(--night); }
+td.fail { color: #a3271a; font-weight: 600; }
+.donts { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+.donts .tile { background: #fff; block-size: 30mm; display: grid; place-items: center; overflow: hidden; position: relative; }
+.donts .tile::after { content: "✕"; position: absolute; inset-block-start: 1.5mm; inset-inline-end: 2.5mm; color: #a3271a; font-size: 8pt; }
+.donts img { inline-size: 34mm; }
+.donts p { font-size: 7.5pt; margin-block-start: 1.5mm; }
+.d1 { transform: scale(1.5, .6); } .d2 { transform: rotate(-16deg); } .d3 { filter: hue-rotate(150deg) saturate(1.6); } .d4 { opacity: .22; }
+
+/* 10 apps */
+.duo { display: grid; grid-template-columns: 1.45fr 1fr; block-size: 100%; }
+.duo > div { position: relative; overflow: hidden; }
+.duo img { inline-size: 100%; block-size: 100%; object-fit: cover; }
+.duo span { position: absolute; inset-block-end: 9mm; inset-inline-start: 9mm; font-size: 6.5pt; letter-spacing: .22em; text-transform: uppercase; opacity: .7; }
+.duo div:first-child span { inset-inline-start: 22mm; }
+
+/* 11 files */
+.status { display: inline-block; padding: 0 2mm; font-size: 6.5pt; letter-spacing: .12em; text-transform: uppercase; border: .25mm solid var(--night); margin-inline-end: 2mm; }
+.status.vector { background: var(--night); color: var(--bone); }
+.status.raster { border-style: dashed; }
+.files { display: grid; grid-template-columns: 1.5fr 1fr; gap: 16mm; }
+.callout { border-inline-start: .6mm solid var(--leather); padding-inline-start: 5mm; }
+.callout p + p { margin-block-start: 3mm; }
+
+/* 12 back */
+.back { display: grid; place-items: center; }
+.back img { inline-size: 46mm; }
+.back p { position: absolute; inset-block-end: 20mm; inset-inline: 0; text-align: center; font-size: 6.5pt; letter-spacing: .3em; text-transform: uppercase; opacity: .7; }
+
+@media print { html { background: none; } .page { margin: 0; } }
+</style>
+</head>
+<body>
+
+<!-- 1 · Cover -->
+<section class="page dark cover">
+  <div class="rule a"></div><div class="rule b"></div>
+  <div class="top"><span>Brand identity</span><span>2026</span></div>
+  <div class="centre"><div>
+    <img src="logo/wordmark-white.svg" alt="صقر (Saqr) logo">
+    <h1>Saqr <span>·</span> Falconry equipment</h1>
+  </div></div>
+  <div class="bottom"><span class="ar">صقر</span><span>Guidelines · Version 1</span></div>
+</section>
+
+<!-- 2 · The idea -->
+<section class="page idea">
+  <div>
+    <span class="eyebrow"><i>01</i> The idea</span>
+    <p class="big">The name<br><em>is</em> the bird.</p>
+    <p>The three Arabic letters of <span class="ar">صقر</span>, “falcon”, are drawn so that the word itself is a falcon in profile, facing the direction Arabic is read.</p>
+    <p class="muted" style="margin-block-start:4mm">One concept: the name means falcon, so the name should be the falcon. Two elements: the word in geometric Kufi lettering, and a falcon in profile. One symbol: the two are the same shape.</p>
+  </div>
+  <div class="anatomy">
+    <img src="logo/wordmark-color.svg" alt="صقر (Saqr) logo">
+    <ol>
+      <li><b>ر</b>The last letter is the hooked beak.</li>
+      <li><b>ق</b>The middle letter is the head; its opening is the eye.</li>
+      <li><b>ص</b>The first letter is the wing, ending in three feathers.</li>
+    </ol>
+  </div>
+  <div class="mark"><b>صقر · Saqr</b><span>02</span></div>
+</section>
+
+<!-- 3 · Shop sign -->
+<section class="page bleed leather">
+  <div class="split">
+    <img src="mockups/mockup-sign.png" alt="Hanging shop sign with the صقر (Saqr) logo">
+    <div class="panel">
+      <img src="logo/wordmark-white.svg" alt="">
+      <p class="quote">Precision, heritage and speed, in one word that reads from a distance.</p>
+      <p class="muted" style="margin-block-start:8mm;max-inline-size:95mm">Made for the places the shop is seen: the sign above the door, a stamp in leather, a label on a box.</p>
+    </div>
+  </div>
+  <div class="mark" style="inset-inline-start:calc(50% + 18mm)"><b>Shop sign</b><span>03</span></div>
+</section>
+
+<!-- 4 · Logo versions -->
+<section class="page bleed">
+  <div class="tiles">
+    <div class="t1"><div class="head"><span class="eyebrow" style="position:static;opacity:1"><i>02</i> Logo versions</span></div>
+      <img src="logo/wordmark-color.svg" alt="صقر (Saqr) primary logo on a light background"><span>Primary · Glove Leather on Bone</span></div>
+    <div class="t2"><img src="logo/wordmark-white.svg" alt="صقر (Saqr) primary logo reversed on Glove Leather"><span>Reversed · on Glove Leather</span></div>
+    <div class="t3"><img src="logo/wordmark-small-white.svg" alt="صقر (Saqr) small version reversed on a dark background"><img src="logo/wordmark-small-color.svg" style="filter:brightness(0) invert(.86) sepia(.4)" alt=""><span>Small version · use from 16 to 32 px high</span></div>
+  </div>
+</section>
+
+<!-- 5 · Clear space and minimum size -->
+<section class="page">
+  <span class="eyebrow"><i>03</i> Clear space and minimum size</span>
+  <h2>Room to fly.</h2>
+  <div class="cols">
+    <figure>
+      <div class="clear"><div><img src="logo/wordmark-small-color.svg" alt="صقر (Saqr) small logo with its clear-space margin outlined"></div></div>
+      <figcaption class="note" style="margin-block-start:3mm">The dashed line marks the clear-space zone (diagram not to scale).</figcaption>
+    </figure>
+    <div>
+      <div class="rules">
+        <div><h3>Clear space</h3><p>Keep a clear margin on every side equal to <em>x</em>: the height of the head loop of the <span class="ar">ق</span> (the box with the eye).</p></div>
+        <div><h3>Minimum size — screen</h3><p>Full version: 32 px high or more. Small version: 16 to 32 px high. Do not use below 16 px — the two dots merge.</p></div>
+        <div><h3>Minimum size — print</h3><p>Not yet tested in print. Run a printed proof before fixing a minimum.</p></div>
+      </div>
+      <div class="sizes">
+        <figure><img src="logo/wordmark-small-color.svg" style="block-size:16px" alt="Small version at 16 pixels"><figcaption>16 PX</figcaption></figure>
+        <figure><img src="logo/wordmark-small-color.svg" style="block-size:32px" alt="Small version at 32 pixels"><figcaption>32 PX</figcaption></figure>
+        <figure><img src="logo/wordmark-color.svg" style="block-size:64px" alt="Full version at 64 pixels"><figcaption>64 PX</figcaption></figure>
+      </div>
+    </div>
+  </div>
+  <div class="mark"><b>صقر · Saqr</b><span>05</span></div>
+</section>
+
+<!-- 6 · Colour -->
+<section class="page bleed">
+  <div class="bands">
+    <div class="band" style="background:var(--leather);color:var(--bone)"><div class="head"><span class="eyebrow"><i style="color:var(--eye)">04</i> Colour</span></div>
+      <h3>Glove Leather</h3><dl><dt>Hex</dt><dd>#7A4022</dd><dt>RGB</dt><dd>122 64 34</dd><dt>CMYK*</dt><dd>0 48 72 52</dd></dl><p>Primary. The tanned leather of the falconer’s glove and hood.</p></div>
+    <div class="band" style="background:var(--sand)"><h3>Dune Sand</h3><dl><dt>Hex</dt><dd>#D8BC8E</dd><dt>RGB</dt><dd>216 188 142</dd><dt>CMYK*</dt><dd>0 13 34 15</dd></dl><p>The open desert the birds are flown over.</p></div>
+    <div class="band" style="background:var(--eye)"><h3>Falcon Eye</h3><dl><dt>Hex</dt><dd>#E3A51E</dd><dt>RGB</dt><dd>227 165 30</dd><dt>CMYK*</dt><dd>0 27 87 11</dd></dl><p>The yellow ring around a falcon’s eye. Small highlights on dark only.</p></div>
+    <div class="band" style="background:var(--night);color:var(--bone)"><h3>Night Roost</h3><dl><dt>Hex</dt><dd>#1D1A16</dd><dt>RGB</dt><dd>29 26 22</dd><dt>CMYK*</dt><dd>0 10 24 89</dd></dl><p>A warm near-black for text and dark backgrounds.</p></div>
+    <div class="band" style="background:var(--bone)"><h3>Bone</h3><dl><dt>Hex</dt><dd>#F6F1E7</dd><dt>RGB</dt><dd>246 241 231</dd><dt>CMYK*</dt><dd>0 2 6 4</dd></dl><p>A warm off-white for page and packaging backgrounds.</p></div>
+  </div>
+  <div class="mark" style="color:var(--bone);inset-inline-end:auto;opacity:.8;letter-spacing:.1em"><b>* Approximate — confirm with the printer</b></div>
+</section>
+
+<!-- 7 · Typography -->
+<section class="page dark">
+  <span class="eyebrow"><i>05</i> Typography</span>
+  <h2>Two voices.</h2>
+  <div class="type">
+    <div class="spec heading"><h3>Headings — Reem Kufi</h3>
+      <p class="glyphs">ص ق ر ١٢٣ Aa</p>
+      <p class="muted">Geometric Kufi. Angular like the logo, for names, titles and signs.</p></div>
+    <div class="spec body"><h3>Body — IBM Plex Sans Arabic</h3>
+      <p class="glyphs">ص ق ر ١٢٣ Aa</p>
+      <p class="muted">Plain and readable in Arabic and Latin, for labels, prices and longer text.</p></div>
+  </div>
+  <p class="note" style="margin-block-start:9mm">Suggested pairing. Both are published under the SIL Open Font License on Google Fonts; check the licence for your use before adopting them. If they are not installed on this computer, the samples above are shown in a system font instead. Neither replaces the hand-drawn logo.</p>
+  <div class="mark"><b>صقر · Saqr</b><span>07</span></div>
+</section>
+
+<!-- 8 · Contrast and misuse -->
+<section class="page">
+  <span class="eyebrow"><i>06</i> Using it well</span>
+  <h2>Keep it sharp.</h2>
+  <div class="cols">
+    <div>
+      <h3>Contrast (WCAG)</h3>
+      <table><thead><tr><th scope="col">Pairing</th><th scope="col">Ratio</th><th scope="col">Text</th><th scope="col">Large / logo</th></tr></thead><tbody>
+        <tr><td>Glove Leather on Bone</td><td>7.2 : 1</td><td>Pass</td><td>Pass</td></tr>
+        <tr><td>Night Roost on Bone</td><td>15.4 : 1</td><td>Pass</td><td>Pass</td></tr>
+        <tr><td>White on Night Roost</td><td>17.3 : 1</td><td>Pass</td><td>Pass</td></tr>
+        <tr><td>White on Glove Leather</td><td>8.1 : 1</td><td>Pass</td><td>Pass</td></tr>
+        <tr><td>Falcon Eye on Night Roost</td><td>8.0 : 1</td><td>Pass</td><td>Pass</td></tr>
+        <tr><td>Night Roost on Dune Sand</td><td>9.5 : 1</td><td>Pass</td><td>Pass</td></tr>
+        <tr><td>Falcon Eye on Bone</td><td>1.9 : 1</td><td class="fail">Fail</td><td class="fail">Fail</td></tr>
+      </tbody></table>
+      <p class="note" style="margin-block-start:3mm">Text needs 4.5 : 1; large text and the logo need 3 : 1.</p>
+    </div>
+    <div>
+      <h3>Don’ts</h3>
+      <ul class="donts">
+        <li><div class="tile"><img class="d1" src="logo/wordmark-color.svg" alt="Example of the logo stretched"></div><p>Do not stretch or squash it.</p></li>
+        <li><div class="tile"><img class="d2" src="logo/wordmark-color.svg" alt="Example of the logo rotated"></div><p>Do not rotate or tilt it.</p></li>
+        <li><div class="tile"><img class="d3" src="logo/wordmark-color.svg" alt="Example of the logo in off-palette colours"></div><p>Do not recolour it outside the palette.</p></li>
+        <li><div class="tile"><img class="d4" src="logo/wordmark-color.svg" alt="Example of the logo with too little contrast"></div><p>Do not place it with too little contrast.</p></li>
+      </ul>
+      <p class="note" style="margin-block-start:4mm">Do not add shadows, gradients, outlines or effects, redraw, move or remove any letter or dot, or retype the name in another typeface.</p>
+    </div>
+  </div>
+  <div class="mark"><b>صقر · Saqr</b><span>08</span></div>
+</section>
+
+<!-- 9 · Business cards -->
+<section class="page bleed full on-photo">
+  <img src="mockups/mockup-card.png" alt="Two stacks of business cards with the صقر (Saqr) logo" style="position:absolute;inset:0;inline-size:100%;block-size:100%;object-fit:cover">
+  <div class="mark" style="color:var(--night);opacity:.6"><b>07 · Applications — Business cards</b><span>09</span></div>
+</section>
+
+<!-- 10 · Packaging and social -->
+<section class="page bleed">
+  <div class="duo">
+    <div><img src="mockups/mockup-box.png" alt="Kraft box with the صقر (Saqr) logo on the lid"><span>Packaging</span></div>
+    <div><img src="mockups/mockup-phone.png" alt="Phone showing a صقر (Saqr) social post" style="object-position:50% 45%"><span>Social profile and post</span></div>
+  </div>
+</section>
+
+<!-- 11 · Files and status -->
+<section class="page">
+  <span class="eyebrow"><i>08</i> Files delivered</span>
+  <h2>What you have.</h2>
+  <div class="files">
+    <table>
+      <thead><tr><th scope="col">File</th><th scope="col">Status</th></tr></thead>
+      <tbody>
+        <tr><td>logo/wordmark.svg</td><td><span class="status vector">Vector</span>full version, takes the colour of its surroundings</td></tr>
+        <tr><td>logo/wordmark-color.svg</td><td><span class="status vector">Vector</span>full version, Glove Leather</td></tr>
+        <tr><td>logo/wordmark-black.svg</td><td><span class="status vector">Vector</span>full version, black</td></tr>
+        <tr><td>logo/wordmark-white.svg</td><td><span class="status vector">Vector</span>full version, white</td></tr>
+        <tr><td>logo/wordmark-small.svg</td><td><span class="status vector">Vector</span>small version</td></tr>
+        <tr><td>logo/wordmark-small-color.svg</td><td><span class="status vector">Vector</span>small version, Glove Leather</td></tr>
+        <tr><td>logo/wordmark-small-black.svg</td><td><span class="status vector">Vector</span>small version, black</td></tr>
+        <tr><td>logo/wordmark-small-white.svg</td><td><span class="status vector">Vector</span>small version, white</td></tr>
+        <tr><td>mockups/mockup-*.png</td><td><span class="status raster">Image</span>real logo placed on free stock photos</td></tr>
+        <tr><td>PNG exports of the logo</td><td><span class="status raster">Not produced</span>no converter installed</td></tr>
+      </tbody>
+    </table>
+    <div class="callout">
+      <h3>Status</h3>
+      <p>Test project. The Arabic lettering has not yet been read and confirmed by a native Arabic reader, which is required before this logo is approved.</p>
+      <p>Mockups are illustrations: the real logo file placed on free stock photos (Unsplash licence). They are not production files.</p>
+      <p>CMYK values are computed approximations. Confirm them with the printer before any print job.</p>
+    </div>
+  </div>
+  <div class="mark"><b>صقر · Saqr</b><span>11</span></div>
+</section>
+
+<!-- 12 · Back cover -->
+<section class="page leather back">
+  <img src="logo/wordmark-small-white.svg" alt="صقر (Saqr) logo">
+  <p>Saqr · Brand identity · 2026</p>
+</section>
+
+</body>
+</html>

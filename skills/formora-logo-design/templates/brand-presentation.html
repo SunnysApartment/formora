@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<!--
+  FORMORA — brand book template (fixed A4 landscape pages, full bleed, self-contained, no JS, works from file://).
+  Copy next to the logo files, then replace every {{TOKEN}}. Paths are relative to this HTML file.
+
+  REMOVE ANY PAGE OR ELEMENT WHOSE CONTENT WAS NOT PRODUCED — NEVER LEAVE A PLACEHOLDER OR IMPLY A DELIVERABLE
+  THAT DOES NOT EXIST. Page numbers and section numbers renumber themselves when a page is deleted.
+  Before handing over, search the file for "{{" — the result must be empty.
+  Fixed labels and section headings are English; translate or reword them to suit the brand.
+
+  Make the PDF with no page margins, for example:
+    "<Chrome>" --headless=new --no-pdf-header-footer --print-to-pdf=brand-presentation.pdf "file:///…/brand-presentation.html"
+  Then open the PDF and look at every page: text must not overflow a page or a colour band.
+
+  Page
+    {{PAGE_LANG}}             BCP 47 language code, e.g. en, ar
+    {{PAGE_DIR}}              ltr or rtl (layout uses logical CSS, so rtl needs no other change)
+    {{BRAND_NAME}}            Brand name as written in the wordmark (also used in titles and alt text)
+    {{TAGLINE_OR_CATEGORY}}   Tagline, or the business category if there is no tagline
+    {{YEAR}}                  Year of issue, e.g. 2026
+  The idea
+    {{HEADLINE}}              The idea in a few words, set very large, e.g. "The name is the bird." (wrap one word in <em> to tint it)
+    {{CONCEPT_STATEMENT}}     One or two sentences: the idea behind the mark and why it fits the brand
+    {{BUILD_STEP_1}}          The one concept, e.g. "Speed + trust"
+    {{BUILD_STEP_2}}          The two visual elements, e.g. "The letter K + a falcon in flight"
+    {{BUILD_STEP_3}}          How they unify, e.g. "The K's diagonal becomes the wing"
+  Brand line (shown beside the storefront photo; delete that page if there is no storefront image)
+    {{BRAND_LINE}}            One sentence in the brand's voice. Write it from the brief; if values were assumed, tell the user
+    {{BRAND_LINE_SUPPORT}}    One plain supporting sentence
+  Logo files (relative paths; *_WHITE_* are the reversed versions for dark and coloured tiles)
+    {{LOGO_PRIMARY_SVG}}   {{LOGO_PRIMARY_WHITE_SVG}}
+    {{SYMBOL_SVG}}         {{SYMBOL_WHITE_SVG}}        symbol, or the simplified small-size version
+    {{LOGO_STACKED_WHITE_SVG}}   {{WORDMARK_WHITE_SVG}}   optional extras on the dark tile; delete the <img> if not produced
+  Clear space and minimum size
+    {{CLEAR_SPACE_RULE}}      e.g. "Keep a margin equal to the height of the symbol's inner circle on every side"
+    {{MIN_SIZE_PRINT}}        e.g. "Primary 30 mm wide; symbol 8 mm" — or "Not yet tested in print" if it was not tested
+    {{MIN_SIZE_SCREEN}}       e.g. "Primary 120 px wide; symbol 16 px"
+  Colour (ROLE = PRIMARY, SECONDARY, ACCENT, DARK, LIGHT; the HEX tokens also feed the CSS variables below)
+    {{COLOR_PRIMARY_NAME}}   {{COLOR_PRIMARY_HEX}}   {{COLOR_PRIMARY_RGB}}   {{COLOR_PRIMARY_CMYK}}   {{COLOR_PRIMARY_WHY}}
+    {{COLOR_SECONDARY_NAME}} {{COLOR_SECONDARY_HEX}} {{COLOR_SECONDARY_RGB}} {{COLOR_SECONDARY_CMYK}} {{COLOR_SECONDARY_WHY}}
+    {{COLOR_ACCENT_NAME}}    {{COLOR_ACCENT_HEX}}    {{COLOR_ACCENT_RGB}}    {{COLOR_ACCENT_CMYK}}    {{COLOR_ACCENT_WHY}}
+    {{COLOR_DARK_NAME}}      {{COLOR_DARK_HEX}}      {{COLOR_DARK_RGB}}      {{COLOR_DARK_CMYK}}      {{COLOR_DARK_WHY}}
+    {{COLOR_LIGHT_NAME}}     {{COLOR_LIGHT_HEX}}     {{COLOR_LIGHT_RGB}}     {{COLOR_LIGHT_CMYK}}     {{COLOR_LIGHT_WHY}}
+      NAME e.g. "Harbour Blue"; HEX "#1F3A5F"; RGB "31 58 95"; CMYK "67 39 0 63" (approximate, not press-proofed);
+      WHY = one short sentence on why the colour was chosen.
+      Fewer than five colours? Delete the unused band, its CSS variable, and one column from .bands.
+      The book assumes DARK is a near-black and LIGHT an off-white. Text on the other three colours is set by
+      the three "on" variables below: check each pairing's contrast and switch between light and dark as needed.
+    {{CONTRAST_ROWS}}         One <tr> per pairing, computed, e.g.
+      <tr><td>Harbour Blue on White</td><td>10.9 : 1</td><td>Pass</td><td>Pass</td></tr>
+      <tr><td>Sun Yellow on White</td><td>1.6 : 1</td><td class="fail">Fail</td><td class="fail">Fail</td></tr>
+  Typography
+    {{HEADING_FONT_NAME}}     Family name exactly as installed, e.g. Fraunces (system fonts are the fallback)
+    {{BODY_FONT_NAME}}        Family name exactly as installed, e.g. Inter
+    {{TYPE_SPECIMEN_GLYPHS}}  Short glyph sample in the brand's script, e.g. "Aa Bb 0123" or "أ ب ت ١٢٣" (keep it short: it is set very large)
+    {{HEADING_FONT_USE}}  {{BODY_FONT_USE}}   One sentence each: character and where it is used
+    {{FONT_LICENCE_NOTE}}     Licence and where to get it; say so if the fonts are not installed and a system font is shown instead
+  Applications
+    {{MOCKUP_STOREFRONT_IMAGE}}  {{MOCKUP_BUSINESS_CARD_IMAGE}}  {{MOCKUP_PACKAGING_IMAGE}}  {{MOCKUP_SOCIAL_IMAGE}}
+      With real mockup images: keep the three photo pages and delete the "flat layouts" page.
+      With no images: delete the three photo pages and keep the "flat layouts" page.
+    {{CARD_DETAILS}}          Flat card back text; use <br> between lines, e.g. "Name<br>Title<br>email"
+  Files delivered
+    {{DELIVERABLES_ROWS}}     One <tr> per real file, e.g.
+      <tr><td>logo-primary.svg</td><td><span class="status vector">Vector</span>primary logo</td></tr>
+      <tr><td>symbol.png</td><td><span class="status raster">Raster only</span>needs vector reconstruction</td></tr>
+    {{STATUS_NOTES}}          One <p> per thing still unconfirmed (native-reader test, CMYK, font licences, mockups are illustrations)
+-->
+<html lang="{{PAGE_LANG}}" dir="{{PAGE_DIR}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>{{BRAND_NAME}} — Brand identity</title>
+<style>
+:root {
+  /* Brand palette: defined once, used everywhere below. */
+  --brand-primary: {{COLOR_PRIMARY_HEX}};
+  --brand-secondary: {{COLOR_SECONDARY_HEX}};
+  --brand-accent: {{COLOR_ACCENT_HEX}};
+  --brand-dark: {{COLOR_DARK_HEX}};
+  --brand-light: {{COLOR_LIGHT_HEX}};
+  /* Text colour on each brand colour. Swap light/dark per palette so every pairing passes contrast. */
+  --on-primary: var(--brand-light);
+  --on-secondary: var(--brand-dark);
+  --on-accent: var(--brand-dark);
+
+  /* Book chrome: an editorial serif for display, a quiet sans for text. System fonts only. */
+  --display: "Didot", "Bodoni 72", "Hoefler Text", "Playfair Display", Georgia, "Geeza Pro", serif;
+  --text: "Avenir Next", "Helvetica Neue", "Segoe UI", Arial, "Noto Sans Arabic", "Geeza Pro", sans-serif;
+  --font-heading: "{{HEADING_FONT_NAME}}", var(--text);
+  --font-body: "{{BODY_FONT_NAME}}", var(--text);
+  color-scheme: only light;
+}
+@page { size: 297mm 210mm; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { background: #8a8580; }
+body { font-family: var(--text); font-size: 9.5pt; line-height: 1.55; color: var(--brand-dark); counter-reset: pg sec; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+img { display: block; }
+/* Logos sit in fixed boxes and are fitted inside them, so any logo shape (wide, square, tall) works. */
+img { object-fit: contain; }
+
+.page { position: relative; inline-size: 297mm; block-size: 210mm; overflow: hidden; background: var(--brand-light); padding: 20mm 22mm 18mm; margin: 8mm auto; break-after: page; break-inside: avoid; counter-increment: pg; }
+.page.dark { background: var(--brand-dark); color: var(--brand-light); }
+.page.primary { background: var(--brand-primary); color: var(--on-primary); }
+.page.bleed { padding: 0; }
+
+/* running marks: brand at the start edge, page number at the end edge */
+.mark { position: absolute; inset-block-end: 9mm; inset-inline: 22mm; display: flex; justify-content: space-between; font-size: 6.5pt; letter-spacing: .22em; text-transform: uppercase; opacity: .55; }
+.mark b { font-weight: 500; }
+.mark .n::after { content: counter(pg, decimal-leading-zero); }
+
+.eyebrow { display: flex; align-items: center; gap: 4mm; font-size: 7pt; letter-spacing: .26em; text-transform: uppercase; font-weight: 500; }
+.eyebrow i { font-style: normal; color: var(--brand-primary); counter-increment: sec; }
+.eyebrow i::before { content: counter(sec, decimal-leading-zero); }
+.dark .eyebrow i, .on-colour .eyebrow i { color: var(--brand-accent); }
+.eyebrow::after { content: ""; flex: 0 0 18mm; block-size: .3mm; background: currentColor; opacity: .5; }
+h1, h2 { font-family: var(--display); font-weight: 400; letter-spacing: -.01em; line-height: 1.04; }
+h2 { font-size: 46pt; margin-block: 9mm 13mm; }
+h3 { font-size: 7.5pt; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; margin-block-end: 2mm; }
+.muted { opacity: .68; }
+.note { font-size: 7.5pt; opacity: .62; max-inline-size: 150mm; }
+
+/* cover */
+.cover { display: grid; grid-template-rows: auto 1fr auto; }
+.cover .top, .cover .bottom { display: flex; justify-content: space-between; font-size: 7pt; letter-spacing: .26em; text-transform: uppercase; opacity: .7; }
+.cover .centre { display: grid; place-items: center; }
+.cover .centre img { inline-size: 150mm; block-size: 62mm; margin-inline: auto; }
+.cover .rule { position: absolute; inset-inline: 22mm; block-size: .3mm; background: var(--brand-accent); opacity: .8; }
+.cover .rule.a { inset-block-start: 30mm; } .cover .rule.b { inset-block-end: 30mm; }
+.cover h1 { font-size: 13pt; letter-spacing: .5em; text-transform: uppercase; font-family: var(--text); font-weight: 400; text-align: center; margin-block-start: 12mm; }
+.cover h1 span { color: var(--brand-accent); }
+
+/* the idea */
+.idea { display: grid; grid-template-columns: 96mm 1fr; gap: 14mm; }
+.idea .big { font-family: var(--display); font-size: 44pt; line-height: 1; margin-block: 8mm 7mm; }
+.idea .big em { font-style: italic; color: var(--brand-primary); }
+.anatomy { align-self: center; }
+.anatomy img { inline-size: 100%; block-size: 62mm; }
+.anatomy ol { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 5mm; margin-block-start: 9mm; border-block-start: .3mm solid color-mix(in srgb, currentColor 35%, transparent); padding-block-start: 4mm; }
+.anatomy li { font-size: 8.5pt; }
+.anatomy li b { display: block; font-size: 6.5pt; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; color: var(--brand-primary); margin-block-end: 1.5mm; }
+
+/* photo pages */
+.split { display: grid; grid-template-columns: 1fr 1fr; block-size: 100%; }
+.split > img { inline-size: 100%; block-size: 100%; object-fit: cover; }
+.split .panel { padding-block: 20mm 18mm; padding-inline: 18mm 22mm; display: flex; flex-direction: column; justify-content: center; }
+.split .panel img { inline-size: 62mm; block-size: 30mm; object-position: 0 50%; margin-block-end: 12mm; }
+.quote { font-family: var(--display); font-size: 25pt; line-height: 1.18; }
+.full > img { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; }
+.duo { display: grid; grid-template-columns: 1.45fr 1fr; block-size: 100%; }
+.duo > div { position: relative; overflow: hidden; }
+.duo img { inline-size: 100%; block-size: 100%; object-fit: cover; }
+.duo span { position: absolute; inset-block-end: 9mm; inset-inline-start: 9mm; font-size: 6.5pt; letter-spacing: .22em; text-transform: uppercase; opacity: .7; }
+.duo div:first-child span { inset-inline-start: 22mm; }
+
+/* logo versions */
+.tiles { display: grid; grid-template-columns: 1.25fr 1fr; grid-template-rows: 1fr 1fr; block-size: 100%; }
+.tiles > div { position: relative; display: grid; place-items: center; }
+.tiles span { position: absolute; inset-block-end: 7mm; inset-inline-start: 9mm; font-size: 6.5pt; letter-spacing: .22em; text-transform: uppercase; opacity: .7; }
+.tiles .t1 { grid-row: 1 / 3; background: var(--brand-light); } .tiles .t1 img { inline-size: 118mm; block-size: 80mm; }
+.tiles .t2 { background: var(--brand-primary); color: var(--on-primary); } .tiles .t2 img { inline-size: 70mm; block-size: 42mm; }
+.tiles .t3 { background: var(--brand-dark); color: var(--brand-light); display: flex; align-items: center; justify-content: center; gap: 10mm; }
+.tiles .t3 img { inline-size: 34mm; block-size: 28mm; }
+.tiles .head { position: absolute; inset-block-start: 20mm; inset-inline-start: 22mm; }
+
+/* clear space */
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16mm; align-items: start; }
+.clear { background: #fff; padding: 14mm; display: grid; place-items: center; }
+.clear div { border: .3mm dashed var(--brand-primary); padding: 11mm; position: relative; }
+.clear div::before { content: "x"; position: absolute; inset-block-start: 2mm; inset-inline-start: 50%; font-family: var(--display); font-style: italic; color: var(--brand-primary); font-size: 10pt; }
+.clear img { inline-size: 74mm; block-size: 36mm; }
+.rules { display: grid; gap: 5mm; }
+.rules div { border-block-start: .3mm solid color-mix(in srgb, currentColor 30%, transparent); padding-block-start: 3mm; }
+.sizes { display: flex; align-items: flex-end; gap: 12mm; margin-block-start: 9mm; }
+.sizes img { inline-size: auto; }
+.sizes figcaption { font-size: 6.5pt; letter-spacing: .2em; margin-block-start: 2mm; opacity: .6; }
+
+/* colour: one full-height band per colour; widths show their share of use */
+.bands { display: grid; grid-template-columns: 1.9fr 1.2fr 1.05fr 1.25fr 1.2fr; block-size: 100%; }
+.band { padding: 20mm 7mm 18mm; display: flex; flex-direction: column; justify-content: flex-end; font-size: 7.5pt; }
+.band:first-child { padding-inline-start: 22mm; }
+.band h3 { font-family: var(--display); font-size: 17pt; text-transform: none; letter-spacing: 0; font-weight: 400; line-height: 1.1; margin-block-end: 3mm; }
+.band dl { display: grid; grid-template-columns: auto 1fr; gap: .4mm 3mm; font-variant-numeric: tabular-nums; }
+.band dt { opacity: .6; letter-spacing: .12em; text-transform: uppercase; font-size: 6pt; align-self: center; }
+.band p { margin-block-start: 4mm; opacity: .8; min-block-size: 20mm; }
+.bands .head { position: absolute; inset-block-start: 20mm; inset-inline-start: 22mm; }
+
+/* typography */
+.type { display: grid; grid-template-columns: 1fr 1fr; gap: 16mm; }
+.type .spec { border-block-start: .3mm solid color-mix(in srgb, currentColor 40%, transparent); padding-block-start: 5mm; }
+.type .glyphs { font-size: 66pt; line-height: 1.5; margin-block: 6mm 8mm; }
+.type .heading .glyphs { font-family: var(--font-heading); color: var(--brand-accent); }
+.type .body .glyphs { font-family: var(--font-body); }
+
+/* contrast and misuse */
+table { inline-size: 100%; border-collapse: collapse; font-size: 8pt; }
+th, td { text-align: start; padding: 2mm 3mm 2mm 0; border-block-end: .25mm solid color-mix(in srgb, currentColor 20%, transparent); }
+th { font-size: 6.5pt; letter-spacing: .16em; text-transform: uppercase; font-weight: 600; border-block-end-color: currentColor; }
+td.fail { color: #a3271a; font-weight: 600; }
+.donts { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+.donts .tile { background: #fff; block-size: 30mm; display: grid; place-items: center; overflow: hidden; position: relative; }
+.donts .tile::after { content: "✕"; position: absolute; inset-block-start: 1.5mm; inset-inline-end: 2.5mm; color: #a3271a; font-size: 8pt; }
+.donts img { inline-size: 34mm; block-size: 18mm; }
+.donts p { font-size: 7.5pt; margin-block-start: 1.5mm; }
+.d1 { transform: scale(1.5, .6); } .d2 { transform: rotate(-16deg); } .d3 { filter: hue-rotate(150deg) saturate(1.6); } .d4 { opacity: .22; }
+
+/* flat layouts (used only when there are no mockup images) */
+.flats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7mm; }
+.flat { background: #fff; aspect-ratio: 3 / 4; display: grid; place-items: center; padding: 7mm; gap: 3mm; align-content: center; }
+.flats figcaption { font-size: 6.5pt; letter-spacing: .2em; text-transform: uppercase; opacity: .6; margin-block-start: 2.5mm; }
+.card { inline-size: 100%; aspect-ratio: 85 / 55; display: grid; place-items: center; padding: 10%; border: .25mm solid color-mix(in srgb, var(--brand-dark) 20%, transparent); font-size: 6pt; line-height: 1.4; }
+.card.front { background: var(--brand-primary); } .card img { inline-size: 70%; block-size: 70%; }
+.label-pack { inline-size: 72%; aspect-ratio: 3 / 4; background: var(--brand-light); display: grid; place-items: center; align-content: center; gap: 3mm; padding: 4mm; font-size: 6pt; text-align: center; }
+.label-pack img { inline-size: 85%; block-size: 14mm; }
+.fascia { inline-size: 100%; background: var(--brand-dark); padding: 9% 12%; display: grid; place-items: center; }
+.fascia img { inline-size: 100%; block-size: 12mm; }
+.window { inline-size: 100%; block-size: 22mm; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5mm; }
+.window i { background: color-mix(in srgb, var(--brand-dark) 12%, transparent); }
+.avatar { inline-size: 20mm; block-size: 20mm; border-radius: 50%; background: var(--brand-primary); display: grid; place-items: center; }
+.avatar img { inline-size: 62%; block-size: 62%; }
+.post { inline-size: 72%; aspect-ratio: 1; background: var(--brand-dark); display: grid; place-items: center; }
+.post img { inline-size: 64%; block-size: 50%; }
+
+/* files */
+.status { display: inline-block; padding: 0 2mm; font-size: 6.5pt; letter-spacing: .12em; text-transform: uppercase; border: .25mm solid currentColor; margin-inline-end: 2mm; }
+.status.vector { background: var(--brand-dark); color: var(--brand-light); border-color: var(--brand-dark); }
+.status.raster { border-style: dashed; }
+.files { display: grid; grid-template-columns: 1.5fr 1fr; gap: 16mm; }
+.callout { border-inline-start: .6mm solid var(--brand-primary); padding-inline-start: 5mm; }
+.callout p + p { margin-block-start: 3mm; }
+
+/* back cover */
+.back { display: grid; place-items: center; }
+.back img { inline-size: 46mm; block-size: 34mm; }
+.back p { position: absolute; inset-block-end: 20mm; inset-inline: 0; text-align: center; font-size: 6.5pt; letter-spacing: .3em; text-transform: uppercase; opacity: .7; }
+
+/* Right-to-left pages (Arabic and similar). Tested: without these, Arabic falls to a Latin font's glyphs,
+   the small tracked labels are too small to read, and letter-spacing pulls joined letters apart. */
+[dir="rtl"] { --text: "IBM Plex Sans Arabic", "Noto Sans Arabic", "Geeza Pro", "Segoe UI", Tahoma, sans-serif;
+  --display: "Noto Naskh Arabic", "Geeza Pro", "Traditional Arabic", "Times New Roman", serif; }
+[dir="rtl"] body { font-size: 10.5pt; line-height: 1.7; }
+[dir="rtl"] * { letter-spacing: 0 !important; }
+[dir="rtl"] :is(.mark, .eyebrow, .cover .top, .cover .bottom, .tiles span, .duo span, .sizes figcaption, .flats figcaption, h3, th, .band dt, .status, .back p, .anatomy li b, .note, .donts p) { font-size: 8.5pt; }
+[dir="rtl"] :is(.band, .anatomy li, table) { font-size: 9pt; }
+[dir="rtl"] .cover h1 { font-size: 18pt; }
+[dir="rtl"] .idea .big em { font-style: normal; }
+[dir="rtl"] .split .panel img { object-position: 100% 50%; }
+[dir="rtl"] .band dd { text-align: right; }
+[dir="rtl"] .bands .band h3 { font-size: 17pt; } /* three classes: must outrank the :is() list above */
+[dir="rtl"] .card, [dir="rtl"] .label-pack { font-size: 7.5pt; }
+
+@media print { html { background: none; } .page { margin: 0; } }
+</style>
+</head>
+<body>
+
+<!-- Cover -->
+<section class="page dark cover">
+  <div class="rule a"></div><div class="rule b"></div>
+  <div class="top"><span>Brand identity</span><span>{{YEAR}}</span></div>
+  <div class="centre"><div>
+    <img src="{{LOGO_PRIMARY_WHITE_SVG}}" alt="{{BRAND_NAME}} logo">
+    <h1>{{BRAND_NAME}} <span>·</span> {{TAGLINE_OR_CATEGORY}}</h1>
+  </div></div>
+  <div class="bottom"><span>{{BRAND_NAME}}</span><span>Guidelines · Version 1</span></div>
+</section>
+
+<!-- The idea. The three steps are FORMORA's method: one concept, two elements, one symbol. -->
+<section class="page idea">
+  <div>
+    <span class="eyebrow"><i></i> The idea</span>
+    <p class="big">{{HEADLINE}}</p>
+    <p>{{CONCEPT_STATEMENT}}</p>
+  </div>
+  <div class="anatomy">
+    <img src="{{LOGO_PRIMARY_SVG}}" alt="{{BRAND_NAME}} logo">
+    <ol>
+      <li><b>One concept</b>{{BUILD_STEP_1}}</li>
+      <li><b>Two elements</b>{{BUILD_STEP_2}}</li>
+      <li><b>One symbol</b>{{BUILD_STEP_3}}</li>
+    </ol>
+  </div>
+  <div class="mark"><b>{{BRAND_NAME}}</b><span class="n"></span></div>
+</section>
+
+<!-- Storefront photo with the brand line. Delete this page if there is no storefront image.
+     If the primary colour is light, use the coloured logo here instead of the white one. -->
+<section class="page bleed primary on-colour">
+  <div class="split">
+    <img src="{{MOCKUP_STOREFRONT_IMAGE}}" alt="Storefront sign with the {{BRAND_NAME}} logo">
+    <div class="panel">
+      <img src="{{LOGO_PRIMARY_WHITE_SVG}}" alt="">
+      <p class="quote">{{BRAND_LINE}}</p>
+      <p class="muted" style="margin-block-start:8mm;max-inline-size:95mm">{{BRAND_LINE_SUPPORT}}</p>
+    </div>
+  </div>
+  <div class="mark" style="inset-inline-start:calc(50% + 18mm)"><b>Storefront</b><span class="n"></span></div>
+</section>
+
+<!-- Logo versions. Delete any <img> or tile for a version that was not produced.
+     If the primary colour is light, use the coloured logo on the second tile. -->
+<section class="page bleed">
+  <div class="tiles">
+    <div class="t1"><div class="head"><span class="eyebrow" style="position:static;opacity:1"><i></i> Logo versions</span></div>
+      <img src="{{LOGO_PRIMARY_SVG}}" alt="{{BRAND_NAME}} primary logo on a light background"><span>Primary</span></div>
+    <div class="t2"><img src="{{LOGO_PRIMARY_WHITE_SVG}}" alt="{{BRAND_NAME}} primary logo reversed on the primary colour"><span>Reversed · on {{COLOR_PRIMARY_NAME}}</span></div>
+    <div class="t3">
+      <img src="{{SYMBOL_WHITE_SVG}}" alt="{{BRAND_NAME}} symbol reversed on a dark background">
+      <img src="{{LOGO_STACKED_WHITE_SVG}}" alt="{{BRAND_NAME}} stacked logo reversed on a dark background">
+      <img src="{{WORDMARK_WHITE_SVG}}" alt="{{BRAND_NAME}} wordmark reversed on a dark background">
+      <span>Other versions · on {{COLOR_DARK_NAME}}</span></div>
+  </div>
+</section>
+
+<!-- Clear space and minimum size. The size strip shows real pixel heights: keep only sizes that were tested. -->
+<section class="page">
+  <span class="eyebrow"><i></i> Clear space and minimum size</span>
+  <h2>Room to breathe.</h2>
+  <div class="cols">
+    <figure>
+      <div class="clear"><div><img src="{{LOGO_PRIMARY_SVG}}" alt="{{BRAND_NAME}} logo with its clear-space margin outlined"></div></div>
+      <figcaption class="note" style="margin-block-start:3mm">The dashed line marks the clear-space zone (diagram not to scale).</figcaption>
+    </figure>
+    <div>
+      <div class="rules">
+        <div><h3>Clear space</h3><p>{{CLEAR_SPACE_RULE}}</p></div>
+        <div><h3>Minimum size — screen</h3><p>{{MIN_SIZE_SCREEN}}</p></div>
+        <div><h3>Minimum size — print</h3><p>{{MIN_SIZE_PRINT}}</p></div>
+      </div>
+      <div class="sizes">
+        <figure><img src="{{SYMBOL_SVG}}" style="block-size:16px" alt="Symbol at 16 pixels"><figcaption dir="ltr">16 PX</figcaption></figure>
+        <figure><img src="{{SYMBOL_SVG}}" style="block-size:32px" alt="Symbol at 32 pixels"><figcaption dir="ltr">32 PX</figcaption></figure>
+        <figure><img src="{{LOGO_PRIMARY_SVG}}" style="block-size:64px" alt="Primary logo at 64 pixels"><figcaption dir="ltr">64 PX</figcaption></figure>
+      </div>
+    </div>
+  </div>
+  <div class="mark"><b>{{BRAND_NAME}}</b><span class="n"></span></div>
+</section>
+
+<!-- Colour. One band per colour; delete unused bands and the matching column in .bands. -->
+<section class="page bleed on-colour">
+  <div class="bands">
+    <div class="band" style="background:var(--brand-primary);color:var(--on-primary)"><div class="head"><span class="eyebrow"><i></i> Colour</span></div>
+      <h3>{{COLOR_PRIMARY_NAME}}</h3><dl><dt>Hex</dt><dd dir="ltr">{{COLOR_PRIMARY_HEX}}</dd><dt>RGB</dt><dd dir="ltr">{{COLOR_PRIMARY_RGB}}</dd><dt>CMYK*</dt><dd dir="ltr">{{COLOR_PRIMARY_CMYK}}</dd></dl><p>{{COLOR_PRIMARY_WHY}}</p></div>
+    <div class="band" style="background:var(--brand-secondary);color:var(--on-secondary)"><h3>{{COLOR_SECONDARY_NAME}}</h3><dl><dt>Hex</dt><dd dir="ltr">{{COLOR_SECONDARY_HEX}}</dd><dt>RGB</dt><dd dir="ltr">{{COLOR_SECONDARY_RGB}}</dd><dt>CMYK*</dt><dd dir="ltr">{{COLOR_SECONDARY_CMYK}}</dd></dl><p>{{COLOR_SECONDARY_WHY}}</p></div>
+    <div class="band" style="background:var(--brand-accent);color:var(--on-accent)"><h3>{{COLOR_ACCENT_NAME}}</h3><dl><dt>Hex</dt><dd dir="ltr">{{COLOR_ACCENT_HEX}}</dd><dt>RGB</dt><dd dir="ltr">{{COLOR_ACCENT_RGB}}</dd><dt>CMYK*</dt><dd dir="ltr">{{COLOR_ACCENT_CMYK}}</dd></dl><p>{{COLOR_ACCENT_WHY}}</p></div>
+    <div class="band" style="background:var(--brand-dark);color:var(--brand-light)"><h3>{{COLOR_DARK_NAME}}</h3><dl><dt>Hex</dt><dd dir="ltr">{{COLOR_DARK_HEX}}</dd><dt>RGB</dt><dd dir="ltr">{{COLOR_DARK_RGB}}</dd><dt>CMYK*</dt><dd dir="ltr">{{COLOR_DARK_CMYK}}</dd></dl><p>{{COLOR_DARK_WHY}}</p></div>
+    <div class="band" style="background:var(--brand-light);color:var(--brand-dark)"><h3>{{COLOR_LIGHT_NAME}}</h3><dl><dt>Hex</dt><dd dir="ltr">{{COLOR_LIGHT_HEX}}</dd><dt>RGB</dt><dd dir="ltr">{{COLOR_LIGHT_RGB}}</dd><dt>CMYK*</dt><dd dir="ltr">{{COLOR_LIGHT_CMYK}}</dd></dl><p>{{COLOR_LIGHT_WHY}}</p></div>
+  </div>
+  <div class="mark" style="color:var(--on-primary);inset-inline-end:auto;opacity:.8;letter-spacing:.1em"><b>* Approximate — confirm with the printer</b></div>
+</section>
+
+<!-- Typography -->
+<section class="page dark">
+  <span class="eyebrow"><i></i> Typography</span>
+  <h2>Two voices.</h2>
+  <div class="type">
+    <div class="spec heading"><h3>Headings — {{HEADING_FONT_NAME}}</h3>
+      <p class="glyphs">{{TYPE_SPECIMEN_GLYPHS}}</p>
+      <p class="muted">{{HEADING_FONT_USE}}</p></div>
+    <div class="spec body"><h3>Body — {{BODY_FONT_NAME}}</h3>
+      <p class="glyphs">{{TYPE_SPECIMEN_GLYPHS}}</p>
+      <p class="muted">{{BODY_FONT_USE}}</p></div>
+  </div>
+  <p class="note" style="margin-block-start:9mm">{{FONT_LICENCE_NOTE}}</p>
+  <div class="mark"><b>{{BRAND_NAME}}</b><span class="n"></span></div>
+</section>
+
+<!-- Contrast and misuse (edit the don'ts to fit the mark) -->
+<section class="page">
+  <span class="eyebrow"><i></i> Using it well</span>
+  <h2>Keep it sharp.</h2>
+  <div class="cols">
+    <div>
+      <h3>Contrast (WCAG)</h3>
+      <table><thead><tr><th scope="col">Pairing</th><th scope="col">Ratio</th><th scope="col">Text</th><th scope="col">Large / logo</th></tr></thead><tbody>
+{{CONTRAST_ROWS}}
+      </tbody></table>
+      <p class="note" style="margin-block-start:3mm">Text needs 4.5 : 1; large text and the logo need 3 : 1.</p>
+    </div>
+    <div>
+      <h3>Don’ts</h3>
+      <ul class="donts">
+        <li><div class="tile"><img class="d1" src="{{LOGO_PRIMARY_SVG}}" alt="Example of the logo stretched"></div><p>Do not stretch or squash it.</p></li>
+        <li><div class="tile"><img class="d2" src="{{LOGO_PRIMARY_SVG}}" alt="Example of the logo rotated"></div><p>Do not rotate or tilt it.</p></li>
+        <li><div class="tile"><img class="d3" src="{{LOGO_PRIMARY_SVG}}" alt="Example of the logo in off-palette colours"></div><p>Do not recolour it outside the palette.</p></li>
+        <li><div class="tile"><img class="d4" src="{{LOGO_PRIMARY_SVG}}" alt="Example of the logo with too little contrast"></div><p>Do not place it with too little contrast.</p></li>
+      </ul>
+      <p class="note" style="margin-block-start:4mm">Do not add shadows, gradients, outlines or effects, redraw or rearrange any part, or retype the name in another typeface.</p>
+    </div>
+  </div>
+  <div class="mark"><b>{{BRAND_NAME}}</b><span class="n"></span></div>
+</section>
+
+<!-- Applications, photo page 1: business cards, full page. Set the mark colour so it reads on the photo. -->
+<section class="page bleed full">
+  <img src="{{MOCKUP_BUSINESS_CARD_IMAGE}}" alt="Business cards with the {{BRAND_NAME}} logo">
+  <div class="mark" style="opacity:.6"><b>Applications — Business cards</b><span class="n"></span></div>
+</section>
+
+<!-- Applications, photo page 2: packaging and social -->
+<section class="page bleed">
+  <div class="duo">
+    <div><img src="{{MOCKUP_PACKAGING_IMAGE}}" alt="Packaging with the {{BRAND_NAME}} logo"><span>Packaging</span></div>
+    <div><img src="{{MOCKUP_SOCIAL_IMAGE}}" alt="Social profile and post with the {{BRAND_NAME}} logo"><span>Social profile and post</span></div>
+  </div>
+</section>
+
+<!-- Applications, flat layouts: keep ONLY when there are no mockup images, and delete the photo pages above. -->
+<section class="page">
+  <span class="eyebrow"><i></i> Applications</span>
+  <h2>In use.</h2>
+  <div class="flats">
+    <figure><div class="flat"><div class="card front"><img src="{{SYMBOL_WHITE_SVG}}" alt="Business card front with the {{BRAND_NAME}} symbol"></div>
+      <div class="card"><p>{{CARD_DETAILS}}</p></div></div><figcaption>Business card</figcaption></figure>
+    <figure><div class="flat"><div class="label-pack"><img src="{{LOGO_PRIMARY_SVG}}" alt="{{BRAND_NAME}} logo on a packaging label"><span class="muted">{{TAGLINE_OR_CATEGORY}}</span></div></div><figcaption>Packaging label</figcaption></figure>
+    <figure><div class="flat"><div class="fascia"><img src="{{LOGO_PRIMARY_WHITE_SVG}}" alt="{{BRAND_NAME}} logo on a storefront fascia"></div>
+      <div class="window" aria-hidden="true"><i></i><i></i><i></i></div></div><figcaption>Storefront sign</figcaption></figure>
+    <figure><div class="flat"><div class="avatar"><img src="{{SYMBOL_WHITE_SVG}}" alt="{{BRAND_NAME}} profile picture"></div>
+      <div class="post"><img src="{{LOGO_PRIMARY_WHITE_SVG}}" alt="{{BRAND_NAME}} post tile"></div></div><figcaption>Social profile and post</figcaption></figure>
+  </div>
+  <p class="note" style="margin-block-start:7mm">Flat layouts, not photographic mockups. Illustrations only, not production files.</p>
+  <div class="mark"><b>{{BRAND_NAME}}</b><span class="n"></span></div>
+</section>
+
+<!-- Files delivered: list only files that exist; mark raster-only artwork honestly -->
+<section class="page">
+  <span class="eyebrow"><i></i> Files delivered</span>
+  <h2>What you have.</h2>
+  <div class="files">
+    <table>
+      <thead><tr><th scope="col">File</th><th scope="col">Status</th></tr></thead>
+      <tbody>
+{{DELIVERABLES_ROWS}}
+      </tbody>
+    </table>
+    <div class="callout">
+      <h3>Status</h3>
+{{STATUS_NOTES}}
+    </div>
+  </div>
+  <div class="mark"><b>{{BRAND_NAME}}</b><span class="n"></span></div>
+</section>
+
+<!-- Back cover. If the primary colour is light, use the coloured symbol. -->
+<section class="page primary back">
+  <img src="{{SYMBOL_WHITE_SVG}}" alt="{{BRAND_NAME}} logo">
+  <p>{{BRAND_NAME}} · Brand identity · {{YEAR}}</p>
+</section>
+
+</body>
+</html>

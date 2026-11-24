@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<!-- Logo preview. Open from disk: preview.html?svg=<path or file:// URL>&name=<label>
+     svg is relative to this page or an absolute file:// URL; name is an optional heading.
+     Loads the SVG with <img> only (no fetch), so it works on file://. No external requests. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Logo preview</title>
+<style>
+  :root { color-scheme: light; }
+  body { margin: 0; padding: 24px; background: #f4f4f4; color: #222; font: 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  h2 { font-size: 14px; margin: 24px 0 8px; font-weight: 600; }
+  .note, .lbl { color: #777; font-size: 11px; }
+  .err { color: #a00; background: #fff; border: 1px solid #d99; padding: 12px; border-radius: 6px; margin: 12px 0; }
+  .grid { display: grid; gap: 12px; }
+  .panel { border: 1px solid #ddd; border-radius: 8px; padding: 12px; overflow-x: auto; }
+  .panel.light { background: #ffffff; }
+  .panel.dark { background: #111111; }
+  .dark .lbl { color: #999; }
+  .sizes { display: flex; align-items: flex-end; gap: 16px; }
+  .cell { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+  .cell img, .tile img { display: block; height: var(--h); width: auto; }
+  .tile { display: inline-flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; margin-right: 12px; }
+  .tile.light { background: #fff; border: 1px solid #ddd; }
+  .tile.dark { background: #111; }
+  .black { filter: brightness(0); }
+  .white { filter: brightness(0) invert(1); }
+</style>
+</head>
+<body>
+<h1 id="title">Logo preview</h1>
+<p class="note" id="src"></p>
+<div id="msg"></div>
+<main id="out"></main>
+<script>
+const q = new URLSearchParams(location.search);
+const svg = q.get("svg"), name = q.get("name");
+const $ = (id) => document.getElementById(id);
+const el = (tag, cls, text) => {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text) e.textContent = text;
+  return e;
+};
+if (name) $("title").textContent = name;
+
+function showError(text) {
+  $("msg").replaceChildren(Object.assign(el("div", "err"), { textContent: text, role: "alert" }));
+  $("out").replaceChildren();
+}
+
+function logo(filterCls, h) {
+  const img = el("img", filterCls);
+  img.src = svg;
+  img.alt = (name || "Logo") + " at " + h + " px high";
+  return img;
+}
+
+function panel(theme, filterCls) {
+  const p = el("div", "panel " + theme);
+  const row = el("div", "sizes");
+  for (const h of [16, 32, 64, 128, 256]) {
+    const c = el("div", "cell");
+    const img = logo(filterCls, h);
+    img.style.setProperty("--h", h + "px");
+    c.append(img, el("span", "lbl", h + " px"));
+    row.append(c);
+  }
+  p.append(row);
+  return p;
+}
+
+function build() {
+  const out = $("out");
+  // [heading, filter class, themes to show]
+  const rows = [
+    ["As drawn", "", ["light", "dark"]],
+    ["One colour, black", "black", ["light"]],
+    ["Reversed, white", "white", ["dark"]],
+  ];
+  for (const [title, cls, themes] of rows) {
+    out.append(el("h2", "", title));
+    const g = el("div", "grid");
+    for (const t of themes) g.append(panel(t, cls));
+    out.append(g);
+  }
+  out.append(el("h2", "", "Favicon test"));
+  const strip = el("div");
+  for (const t of ["light", "dark"]) {
+    const tile = el("div", "tile " + t);
+    for (const h of [16, 32]) {
+      const img = logo(t === "dark" ? "white" : "", h);
+      img.style.setProperty("--h", h + "px");
+      tile.append(img);
+    }
+    strip.append(tile);
+  }
+  out.append(strip);
+}
+
+if (!svg) {
+  showError("No logo given. Usage: preview.html?svg=<path or file:// URL>&name=<label>");
+} else {
+  $("src").textContent = svg;
+  // Probe first so a bad path gives one clear error instead of 30 broken images.
+  const probe = new Image();
+  probe.onload = build;
+  probe.onerror = () => showError("Could not load image: " + svg + " (check the path; relative paths resolve from this page).");
+  probe.src = svg;
+}
+</script>
+</body>
+</html>

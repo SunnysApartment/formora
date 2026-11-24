@@ -1,0 +1,5 @@
+.DS_Store
+# Third-party stock photos are not redistributed; examples/saqr/mockups/SOURCES.md says where to fetch them.
+examples/*/mockups/photos/
+# Local Claude Code settings
+.claude/
