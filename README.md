@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-16161A"></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-1D1A16?style=flat"></a>
   <a href="CHANGELOG.md"><img alt="Version 1.3.0" src="https://img.shields.io/badge/version-1.3.0-E3A51E"></a>
   <img alt="Claude Code skill" src="https://img.shields.io/badge/Claude%20Code-skill-7A4022">
   <img alt="Latin and Arabic" src="https://img.shields.io/badge/scripts-Latin%20%C2%B7%20Arabic-16161A">
