@@ -3,10 +3,10 @@
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-1D1A16?style=flat"></a>
-  <a href="CHANGELOG.md"><img alt="Version 1.3.0" src="https://img.shields.io/badge/version-1.3.0-E3A51E"></a>
-  <img alt="Claude Code skill" src="https://img.shields.io/badge/Claude%20Code-skill-7A4022">
-  <img alt="Latin and Arabic" src="https://img.shields.io/badge/scripts-Latin%20%C2%B7%20Arabic-16161A">
+  <a href="LICENSE"><img alt="License: MIT" src="assets/badges/license.svg"></a>
+  <a href="CHANGELOG.md"><img alt="Version 1.3.0" src="assets/badges/version.svg"></a>
+  <img alt="Claude Code skill" src="assets/badges/skill.svg">
+  <img alt="Latin and Arabic" src="assets/badges/scripts.svg">
 </p>
 
 <h3 align="center">A conceptual identity designer for Claude Code.</h3>
